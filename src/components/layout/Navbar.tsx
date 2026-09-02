@@ -96,7 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     // Pelayanan Desa
     { title: 'Pelayanan Desa', desc: 'Pusat permohonan surat administrasi, kependudukan, nikah, dan pindah datang', page: 'pelayanan-desa' as PageRoute, tag: 'Pelayanan' },
     { title: 'Surat Keterangan (Domisili, SKU, SKTM)', desc: 'Layanan online surat domisili, usaha, dan tidak mampu', page: 'pelayanan-surat-keterangan' as PageRoute, tag: 'Pelayanan' },
-    { title: 'Kependudukan (Pengantar KTP & KIA)', desc: 'Pengantar perekaman KTP baru, rusak, hilang, dan KIA', page: 'pelayanan-kependudukan' as PageRoute, tag: 'Pelayanan' },
     { title: 'Pindah Datang (SKPWNI)', desc: 'Surat keterangan pindah keluar dan masuk kependudukan', page: 'pelayanan-pindah-datang' as PageRoute, tag: 'Pelayanan' },
     { title: 'Layanan Pernikahan (N1 - N4)', desc: 'Surat pengantar nikah desa, formulir N1-N4 dan KUA', page: 'pelayanan-layanan-pernikahan' as PageRoute, tag: 'Pelayanan' },
     // Berita
@@ -305,13 +304,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
                   >
                     <span>Surat Keterangan</span>
-                    <ArrowRight className="w-3 h-3 text-slate-400" />
-                  </button>
-                  <button
-                    onClick={() => handleNavClick('pelayanan-kependudukan')}
-                    className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
-                  >
-                    <span>Kependudukan</span>
                     <ArrowRight className="w-3 h-3 text-slate-400" />
                   </button>
                   <button
@@ -627,12 +619,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
                 >
                   Surat Keterangan
-                </button>
-                <button
-                  onClick={() => handleNavClick('pelayanan-kependudukan')}
-                  className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
-                >
-                  Kependudukan
                 </button>
                 <button
                   onClick={() => handleNavClick('pelayanan-pindah-datang')}

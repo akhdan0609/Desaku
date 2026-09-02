@@ -27,7 +27,6 @@ export type PageRoute =
   // Pelayanan Desa
   | 'pelayanan-desa'
   | 'pelayanan-surat-keterangan'
-  | 'pelayanan-kependudukan'
   | 'pelayanan-pindah-datang'
   | 'pelayanan-layanan-pernikahan'
   | 'pelayanan-informasi'

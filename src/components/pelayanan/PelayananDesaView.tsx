@@ -43,16 +43,6 @@ export const PelayananDesaView: React.FC<PelayananDesaViewProps> = ({ onNavigate
       page: 'pelayanan-surat-keterangan' as PageRoute
     },
     {
-      id: 'kependudukan',
-      title: 'KEPENDUDUKAN',
-      desc: 'Layanan administrasi kependudukan untuk pengurusan identitas dan dokumen warga.',
-      items: [
-        'Surat Pengantar KTP'
-      ],
-      icon: Users,
-      page: 'pelayanan-kependudukan' as PageRoute
-    },
-    {
       id: 'layanan-pernikahan',
       title: 'LAYANAN PERNIKAHAN',
       desc: 'Layanan administrasi pernikahan sesuai ketentuan yang berlaku.',
@@ -166,7 +156,7 @@ export const PelayananDesaView: React.FC<PelayananDesaViewProps> = ({ onNavigate
             <span className="text-[#0f4d38] font-bold">Pelayanan Desa</span>
           </div>
           <p className="text-xs sm:text-sm text-slate-600">
-            Pusat permohonan surat administrasi, kependudukan, dan layanan terpadu warga
+            Pusat permohonan surat administrasi dan layanan terpadu warga
           </p>
         </div>
       </div>
