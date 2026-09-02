@@ -90,7 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { title: 'Potensi Desa', desc: 'Destinasi wisata alam, UMKM unggulan, seni budaya adat, dan budidaya peternakan perikanan', page: 'potensi-desa' as PageRoute, tag: 'Potensi' },
     { title: 'Destinasi Wisata Alam', desc: 'Curug Menteng, Bukit Menteng Asri, Camping Ground', page: 'potensi-destinasi' as PageRoute, tag: 'Potensi' },
     { title: 'UMKM Desa', desc: 'Pemberdayaan unit usaha mikro kecil menengah warga desa', page: 'potensi-umkm' as PageRoute, tag: 'Potensi' },
-    { title: 'Produk Lokal Khas Menteng', desc: 'Kopi Robusta Lereng Salak, Anyaman Bambu, Olahan Salak', page: 'potensi-produk-lokal' as PageRoute, tag: 'Potensi' },
+
     { title: 'Budaya & Adat Istiadat', desc: 'Upacara Seren Taun Cijeruk, Silat Cimande, Seni Calung', page: 'potensi-budaya' as PageRoute, tag: 'Potensi' },
     { title: 'Budidaya', desc: 'Sentra budidaya kolam air deras nila, mas, dan gurame', page: 'potensi-perikanan' as PageRoute, tag: 'Potensi' },
     // Pelayanan Desa
@@ -257,13 +257,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
                   >
                     <span>UMKM</span>
-                    <ArrowRight className="w-3 h-3 text-slate-400" />
-                  </button>
-                  <button
-                    onClick={() => handleNavClick('potensi-produk-lokal')}
-                    className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
-                  >
-                    <span>Produk Lokal</span>
                     <ArrowRight className="w-3 h-3 text-slate-400" />
                   </button>
                   <button
@@ -595,12 +588,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
                 >
                   UMKM
-                </button>
-                <button
-                  onClick={() => handleNavClick('potensi-produk-lokal')}
-                  className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
-                >
-                  Produk Lokal
                 </button>
                 <button
                   onClick={() => handleNavClick('potensi-budaya')}

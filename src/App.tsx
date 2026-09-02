@@ -18,7 +18,7 @@ import { AnggaranDesaView } from './components/profil/AnggaranDesaView';
 import { PotensiDesaView } from './components/potensi/PotensiDesaView';
 import { DestinasiView } from './components/potensi/DestinasiView';
 import { UMKMView } from './components/potensi/UMKMView';
-import { ProdukLokalView } from './components/potensi/ProdukLokalView';
+
 import { BudayaAdatView } from './components/potensi/BudayaAdatView';
 import { SitusSejarahView } from './components/potensi/SitusSejarahView';
 import { PotensiPerikananView } from './components/potensi/PotensiPerikananView';
@@ -117,8 +117,6 @@ export default function App() {
         return <DestinasiView />;
       case 'potensi-umkm':
         return <UMKMView initialCategory={navParams?.initialCategory || 'semua'} />;
-      case 'potensi-produk-lokal':
-        return <ProdukLokalView />;
       case 'potensi-budaya':
         return <BudayaAdatView />;
       case 'potensi-situs-sejarah':

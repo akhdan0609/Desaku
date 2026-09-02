@@ -13,7 +13,6 @@ export type PageRoute =
   | 'potensi-desa'
   | 'potensi-destinasi'
   | 'potensi-umkm'
-  | 'potensi-produk-lokal'
   | 'potensi-situs-sejarah'
   | 'potensi-budaya'
   | 'potensi-perikanan'
