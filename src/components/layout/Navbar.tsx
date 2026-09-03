@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { PageRoute } from '../../types';
 import { getAdminAuth, setAdminAuth } from '../../utils/storage';
+import { KONTAK_DARURAT_LIST } from '../../data/mockData';
 
 interface NavbarProps {
   activePage: PageRoute;
@@ -27,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [kontakDaruratOpen, setKontakDaruratOpen] = useState(false);
   const [adminAuth, setAdminAuthState] = useState(getAdminAuth());
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,6 +47,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setOpenDropdown(null);
+        setKontakDaruratOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -54,6 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const handleNavClick = (page: PageRoute, params?: any) => {
     onNavigate(page, params);
     setOpenDropdown(null);
+    setKontakDaruratOpen(false);
     setMobileMenuOpen(false);
     setSearchModalOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -410,14 +414,71 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* 4. Right Action: Emergency Button (Red, Hidden on Profil Desa, Potensi Desa, & Pelayanan) */}
           <div className="flex items-center gap-1 sm:gap-2">
             {!hideKontakDarurat && (
-              <button
-                onClick={() => handleNavClick('kontak-darurat')}
-                className="bg-[#b91c1c] hover:bg-red-800 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 whitespace-nowrap"
-              >
-                <PhoneCall className="w-4 h-4" />
-                <span>Kontak Darurat</span>
-                <ChevronDown className="w-3.5 h-3.5 opacity-80" />
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setKontakDaruratOpen(prev => !prev);
+                    setOpenDropdown(null);
+                  }}
+                  aria-haspopup="true"
+                  aria-expanded={kontakDaruratOpen}
+                  className={`bg-[#b91c1c] hover:bg-red-800 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 whitespace-nowrap ${
+                    kontakDaruratOpen ? 'bg-red-800' : ''
+                  }`}
+                >
+                  <PhoneCall className="w-4 h-4" />
+                  <span className="hidden min-[375px]:inline">Kontak Darurat</span>
+                  <ChevronDown className={`w-3.5 h-3.5 opacity-80 transition-transform duration-200 ${kontakDaruratOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {kontakDaruratOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 origin-top-right">
+                    <div className="px-4 py-2 border-b border-slate-100 mb-1">
+                      <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
+                        <PhoneCall className="w-4 h-4 text-rose-600" />
+                        <span>Kontak Darurat 24 Jam</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Klik nomor untuk langsung menelepon
+                      </p>
+                    </div>
+                    <div className="max-h-72 overflow-y-auto space-y-1 px-2">
+                      {KONTAK_DARURAT_LIST.map(item => {
+                        const digits = item.nomorTelepon.replace(/[^0-9]/g, '');
+                        return (
+                          <a
+                            key={item.id}
+                            href={`tel:${digits}`}
+                            onClick={() => setKontakDaruratOpen(false)}
+                            className="flex items-center gap-3 px-2.5 py-2.5 rounded-xl hover:bg-rose-50 transition group"
+                          >
+                            <span className="w-9 h-9 shrink-0 rounded-lg bg-rose-600/10 text-rose-700 flex items-center justify-center">
+                              <PhoneCall className="w-4 h-4" />
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-xs font-bold text-slate-900 truncate">
+                                {item.instansi}
+                              </span>
+                              <span className="block text-[11px] text-rose-700 font-semibold truncate">
+                                {item.nomorTelepon}
+                              </span>
+                            </span>
+                            <ChevronDown className="w-3.5 h-3.5 -rotate-90 text-slate-300 group-hover:text-rose-500 shrink-0" />
+                          </a>
+                        );
+                      })}
+                    </div>
+                    <div className="px-2 pt-2 border-t border-slate-100 mt-1">
+                      <button
+                        onClick={() => handleNavClick('kontak-darurat')}
+                        className="w-full text-center text-xs font-bold text-rose-700 hover:bg-rose-50 rounded-xl px-3 py-2.5 transition"
+                      >
+                        Lihat Semua Kontak Darurat
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Mobile menu trigger */}
