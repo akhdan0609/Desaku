@@ -11,7 +11,7 @@ import {
 import { saveSuratRequest } from '../../utils/storage';
 
 export const LayananPernikahanView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'panduan-n1-n4' | 'pengantar-nikah' | 'n1' | 'n2' | 'n3' | 'n4' | 'belum-nikah' | 'sk-na'>('panduan-n1-n4');
+  const [activeTab, setActiveTab] = useState<'formulir-n1-n4' | 'belum-nikah' | 'sk-na'>('formulir-n1-n4');
   const [guideN, setGuideN] = useState<'n1' | 'n2' | 'n3' | 'n4'>('n1');
   const [submittedCode, setSubmittedCode] = useState<string | null>(null);
 
@@ -48,9 +48,7 @@ export const LayananPernikahanView: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const jenisMap: Record<typeof activeTab, { label: string; prefix: string }> = {
-      'panduan-n1-n4': { label: 'Formulir N1-N4', prefix: 'N' },
-      'pengantar-nikah': { label: 'Surat Pengantar Nikah', prefix: 'NIKAH' },
+    const jenisMap: Record<'n1' | 'n2' | 'n3' | 'n4' | 'belum-nikah' | 'sk-na', { label: string; prefix: string }> = {
       'n1': { label: 'Form N1 - Surat Pengantar Nikah dari Kepala Desa', prefix: 'N1' },
       'n2': { label: 'Form N2 - Surat Permohonan Kehendak Nikah', prefix: 'N2' },
       'n3': { label: 'Form N3 - Surat Persetujuan Mempelai', prefix: 'N3' },
@@ -59,7 +57,7 @@ export const LayananPernikahanView: React.FC = () => {
       'sk-na': { label: 'Surat Keterangan NA (Belum Menikah & Numpang Nikah)', prefix: 'SKNA' },
     };
 
-    const effectiveTab = activeTab === 'panduan-n1-n4' ? guideN : activeTab;
+    const effectiveTab = activeTab === 'formulir-n1-n4' ? guideN : activeTab;
     const jenis = jenisMap[effectiveTab];
     const jenisLabel = jenis.label;
     const prefix = jenis.prefix;
@@ -376,14 +374,9 @@ export const LayananPernikahanView: React.FC = () => {
         </div>
 
         {/* Pilihan Lembar Surat */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            { key: 'panduan-n1-n4', tag: 'Panduan', title: 'Panduan Formulir N1-N4', desc: 'Rincian fungsi setiap lembar N1, N2, N3, dan N4 beserta formulirnya.' },
-            { key: 'pengantar-nikah', tag: 'Surat Pengantar', title: 'Pengantar Nikah', desc: 'Surat pengantar nikah dari Kepala Desa untuk pendaftaran akad ke KUA.' },
-            { key: 'n1', tag: 'Form N1', title: 'Surat Pengantar Nikah (Kepala Desa)', desc: 'Form N1 menerangkan biodata lengkap calon mempelai warga desa.' },
-            { key: 'n2', tag: 'Form N2', title: 'Surat Permohonan Kehendak Nikah', desc: 'Form N2 surat resmi permohonan pendaftaran ke KUA Cijeruk.' },
-            { key: 'n3', tag: 'Form N3', title: 'Surat Persetujuan Mempelai', desc: 'Form N3 pernyataan kerelaan kedua calon mempelai tanpa paksaan.' },
-            { key: 'n4', tag: 'Form N4', title: 'Surat Izin Orang Tua / Wali', desc: 'Form N4 persetujuan resmi dari orang tua kandung atau wali sah.' },
+            { key: 'formulir-n1-n4', tag: 'Formulir', title: 'Formulir N1-N4', desc: 'Panduan & isian Form N1, N2, N3, dan N4 untuk administrasi pernikahan.' },
             { key: 'belum-nikah', tag: 'Surat Keterangan', title: 'Keterangan Belum Menikah', desc: 'Surat keterangan status lajang / belum pernah kawin.' },
             { key: 'sk-na', tag: 'Surat Keterangan', title: 'Keterangan NA (Numpang Nikah)', desc: 'Surat keterangan status lajang sekaligus pernikahan di luar domisili.' }
           ].map(opt => (
@@ -418,7 +411,7 @@ export const LayananPernikahanView: React.FC = () => {
         </div>
 
         {/* Panduan Formulir N1-N4 */}
-        {activeTab === 'panduan-n1-n4' && (
+        {activeTab === 'formulir-n1-n4' && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
             <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-600" />
@@ -478,7 +471,7 @@ export const LayananPernikahanView: React.FC = () => {
         )}
 
         {/* Persyaratan & Form Grid */}
-        {activeTab !== 'panduan-n1-n4' && (
+        {activeTab !== 'formulir-n1-n4' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
             {/* Left: Persyaratan Berkas */}
@@ -536,12 +529,7 @@ export const LayananPernikahanView: React.FC = () => {
               <div className="border-b border-slate-100 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900">
                   {{
-                    'panduan-n1-n4': 'Panduan Formulir N1-N4',
-                    'pengantar-nikah': 'Formulir Surat Pengantar Nikah',
-                    'n1': 'Formulir N1 - Surat Pengantar Nikah (Kepala Desa)',
-                    'n2': 'Formulir N2 - Surat Permohonan Kehendak Nikah',
-                    'n3': 'Formulir N3 - Surat Persetujuan Mempelai',
-                    'n4': 'Formulir N4 - Surat Izin Orang Tua / Wali',
+                    'formulir-n1-n4': 'Formulir N1-N4',
                     'belum-nikah': 'Formulir Surat Keterangan Belum Menikah',
                     'sk-na': 'Formulir Surat Keterangan NA (Numpang Nikah & Belum Menikah)'
                   }[activeTab]}
