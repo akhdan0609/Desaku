@@ -1043,20 +1043,7 @@ export const INITIAL_LAPORAN_WARGA: LaporanWarga[] = [
 export const KONTAK_DARURAT_LIST: KontakDaruratItem[] = [
   {
     id: 'dar-1',
-    namaLayanan: 'Ambulans Siaga Desa Warung Menteng',
-    instansi: 'Pemerintah Desa Warung Menteng & Puskesmas Cijeruk',
-    kategori: 'Medis & Kesehatan',
-    nomorTelepon: '0811-2233-4455',
-    nomorWA: '6281122334455',
-    alamatPos: 'Garasi Siaga Kantor Desa Warung Menteng',
-    siaga: '24 Jam Non-Stop',
-    namaPetugas: 'Pak Jajang (Driver Siaga 1) / Pak Hendra (Driver Siaga 2)',
-    deskripsi: 'Layanan antar jemput pasien gawat darurat, ibu melahirkan, rujukan RSUD Ciawi / PMI Bogor gratis bagi warga Desa Warung Menteng.',
-    iconName: 'Ambulance'
-  },
-  {
-    id: 'dar-2',
-    namaLayanan: 'Damkar (Pemadam Kebakaran & Evakuasi Satwa)',
+    namaLayanan: 'Pemadam Kebakaran',
     instansi: 'Dinas Pemadam Kebakaran Sektor Ciawi / Bogor Selatan',
     kategori: 'Kebakaran & Bencana',
     nomorTelepon: '(0251) 8240113',
@@ -1068,21 +1055,21 @@ export const KONTAK_DARURAT_LIST: KontakDaruratItem[] = [
     iconName: 'Flame'
   },
   {
-    id: 'dar-3',
-    namaLayanan: 'BPBD (Badan Penanggulangan Bencana Daerah)',
-    instansi: 'BPBD Kabupaten Bogor (Posko Siaga Bencana Selatan)',
-    kategori: 'Kebakaran & Bencana',
-    nomorTelepon: '(0251) 8542220',
-    nomorWA: '6281210109008',
-    alamatPos: 'Pusdalops BPBD Kab. Bogor',
-    siaga: '24 Jam Siaga Bencana',
-    namaPetugas: 'Operator Pusdalops BPBD',
-    deskripsi: 'Tanggap darurat bencana tanah longsor lereng Gn. Salak, angin puting beliung, luapan sungai, dan distribusi logistik darurat.',
-    iconName: 'ShieldAlert'
+    id: 'dar-2',
+    namaLayanan: 'Ambulance Siaga',
+    instansi: 'Pemerintah Desa Warung Menteng & Puskesmas Cijeruk',
+    kategori: 'Medis & Kesehatan',
+    nomorTelepon: '0811-2233-4455',
+    nomorWA: '6281122334455',
+    alamatPos: 'Garasi Siaga Kantor Desa Warung Menteng',
+    siaga: '24 Jam Non-Stop',
+    namaPetugas: 'Pak Jajang (Driver Siaga 1) / Pak Hendra (Driver Siaga 2)',
+    deskripsi: 'Layanan antar jemput pasien gawat darurat, ibu melahirkan, rujukan RSUD Ciawi / PMI Bogor gratis bagi warga Desa Warung Menteng.',
+    iconName: 'Ambulance'
   },
   {
-    id: 'dar-4',
-    namaLayanan: 'Bhabinkamtibmas (Polsek Cijeruk)',
+    id: 'dar-3',
+    namaLayanan: 'Bhabinkamtibmas',
     instansi: 'Kepolisian Sektor (Polsek) Cijeruk - Polres Bogor',
     kategori: 'Keamanan & Ketertiban',
     nomorTelepon: '0812-3456-7890',
@@ -1094,21 +1081,21 @@ export const KONTAK_DARURAT_LIST: KontakDaruratItem[] = [
     iconName: 'Shield'
   },
   {
-    id: 'dar-5',
-    namaLayanan: 'Babinsa (Koramil 2123 / Cijeruk-Cigombong)',
-    instansi: 'Komando Rayon Militer (Koramil) Kodim 0621 Kab. Bogor',
-    kategori: 'Keamanan & Ketertiban',
-    nomorTelepon: '0813-8899-0011',
-    nomorWA: '6281388990011',
-    alamatPos: 'Koramil Cijeruk / Pos Babinsa Desa',
-    siaga: '24 Jam Ketahanan Wilayah',
-    namaPetugas: 'Serka Mulyadi (Babinsa Desa Warung Menteng)',
-    deskripsi: 'Pengamanan teritorial wilayah, pendampingan tanggap bencana, karya bakti gotong royong, dan stabilitas keamanan perbatasan.',
-    iconName: 'ShieldCheck'
+    id: 'dar-4',
+    namaLayanan: 'BPBD',
+    instansi: 'BPBD Kabupaten Bogor (Posko Siaga Bencana Selatan)',
+    kategori: 'Kebakaran & Bencana',
+    nomorTelepon: '(0251) 8542220',
+    nomorWA: '6281210109008',
+    alamatPos: 'Pusdalops BPBD Kab. Bogor',
+    siaga: '24 Jam Siaga Bencana',
+    namaPetugas: 'Operator Pusdalops BPBD',
+    deskripsi: 'Tanggap darurat bencana tanah longsor lereng Gn. Salak, angin puting beliung, luapan sungai, dan distribusi logistik darurat.',
+    iconName: 'ShieldAlert'
   },
   {
-    id: 'dar-6',
-    namaLayanan: 'Satpol PP Kecamatan Cijeruk',
+    id: 'dar-5',
+    namaLayanan: 'Satpol PP',
     instansi: 'Satuan Polisi Pamong Praja Kecamatan Cijeruk',
     kategori: 'Keamanan & Ketertiban',
     nomorTelepon: '0857-7788-9900',
@@ -1120,8 +1107,21 @@ export const KONTAK_DARURAT_LIST: KontakDaruratItem[] = [
     iconName: 'Building2'
   },
   {
+    id: 'dar-6',
+    namaLayanan: 'Babinsa',
+    instansi: 'Komando Rayon Militer (Koramil) Kodim 0621 Kab. Bogor',
+    kategori: 'Keamanan & Ketertiban',
+    nomorTelepon: '0813-8899-0011',
+    nomorWA: '6281388990011',
+    alamatPos: 'Koramil Cijeruk / Pos Babinsa Desa',
+    siaga: '24 Jam Ketahanan Wilayah',
+    namaPetugas: 'Serka Mulyadi (Babinsa Desa Warung Menteng)',
+    deskripsi: 'Pengamanan teritorial wilayah, pendampingan tanggap bencana, karya bakti gotong royong, dan stabilitas keamanan perbatasan.',
+    iconName: 'ShieldCheck'
+  },
+  {
     id: 'dar-7',
-    namaLayanan: 'Bidan Desa (Pelayanan Ibu, Bayi & Kegawatdaruratan Kebidanan)',
+    namaLayanan: 'Bidan Desa',
     instansi: 'Pustu Warung Menteng / Puskesmas Cijeruk',
     kategori: 'Medis & Kesehatan',
     nomorTelepon: '0813-1122-3344',
@@ -1134,7 +1134,7 @@ export const KONTAK_DARURAT_LIST: KontakDaruratItem[] = [
   },
   {
     id: 'dar-8',
-    namaLayanan: 'PLKB (Penyuluh Keluarga Berencana Kecamatan Cijeruk)',
+    namaLayanan: 'PLKB',
     instansi: 'DP3AP2KB Kabupaten Bogor',
     kategori: 'Pamong Desa',
     nomorTelepon: '0858-9900-1133',

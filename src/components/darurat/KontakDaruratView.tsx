@@ -103,11 +103,11 @@ export const KontakDaruratView: React.FC = () => {
 
                 <div>
                   <h3 className="text-base font-extrabold text-slate-900 leading-snug">
-                    {item.namaKontak}
+                    {item.namaLayanan || item.namaKontak}
                   </h3>
                   <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                    <span className="line-clamp-1">{item.alamat}</span>
+                    <span className="line-clamp-1">{item.alamatPos || item.alamat}</span>
                   </p>
                 </div>
 
@@ -119,7 +119,7 @@ export const KontakDaruratView: React.FC = () => {
                 </div>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  {item.keterangan}
+                  {item.deskripsi || item.keterangan}
                 </p>
               </div>
 
