@@ -14,7 +14,7 @@ import {
 import { saveSuratRequest } from '../../utils/storage';
 
 export const LayananPernikahanView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'pengantar-nikah' | 'formulir-n1-n4' | 'belum-nikah'>('pengantar-nikah');
+  const [activeTab, setActiveTab] = useState<'pengantar-nikah' | 'formulir-n1-n4' | 'belum-nikah' | 'sk-na'>('pengantar-nikah');
   const [submittedCode, setSubmittedCode] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -55,6 +55,10 @@ export const LayananPernikahanView: React.FC = () => {
     if (activeTab === 'belum-nikah') {
       jenisLabel = 'Surat Keterangan Belum Pernah Menikah';
       prefix = 'SKBM';
+    }
+    if (activeTab === 'sk-na') {
+      jenisLabel = 'Surat Keterangan NA (Belum Menikah & Numpang Nikah)';
+      prefix = 'SKNA';
     }
 
     const regCode = `${prefix}-${Date.now().toString().slice(-6)}`;
@@ -104,13 +108,13 @@ export const LayananPernikahanView: React.FC = () => {
             </h1>
             
             <p className="text-slate-200 text-sm sm:text-base leading-relaxed">
-              Pelayanan penerbitan Surat Pengantar Nikah dari Desa, Formulir Model N1, N2, N3, N4, serta Surat Keterangan Belum Menikah untuk pendaftaran akad nikah ke Kantor Urusan Agama (KUA) Kecamatan Cijeruk.
+              Pelayanan penerbitan Surat Pengantar Nikah dari Desa, Formulir Model N1, N2, N3, N4, Surat Keterangan Belum Menikah, serta Surat Keterangan NA (Numpang Nikah) untuk pendaftaran akad nikah ke Kantor Urusan Agama (KUA) Kecamatan Cijeruk.
             </p>
           </div>
         </div>
 
-        {/* 3 Tabs */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* 4 Tabs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <button
             onClick={() => { setActiveTab('pengantar-nikah'); setSubmittedCode(null); }}
             className={`p-5 rounded-2xl border text-left transition duration-200 flex flex-col justify-between ${
@@ -184,6 +188,33 @@ export const LayananPernikahanView: React.FC = () => {
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
                 Khusus permohonan surat keterangan status lajang / belum pernah kawin.
+              </p>
+            </div>
+            <div className="pt-3 flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+              <span>Pilih Surat Ini</span>
+              <span>→</span>
+            </div>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('sk-na'); setSubmittedCode(null); }}
+            className={`p-5 rounded-2xl border text-left transition duration-200 flex flex-col justify-between ${
+              activeTab === 'sk-na'
+                ? 'bg-white border-emerald-600 shadow-md ring-2 ring-emerald-600/20'
+                : 'bg-white border-slate-200 hover:border-emerald-300 shadow-xs'
+            }`}
+          >
+            <div className="space-y-1">
+              <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md inline-block mb-1 ${
+                activeTab === 'sk-na' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+              }`}>
+                Surat Keterangan
+              </span>
+              <h3 className={`font-bold text-sm ${activeTab === 'sk-na' ? 'text-emerald-900' : 'text-slate-900'}`}>
+                Keterangan NA (Numpang Nikah & Belum Menikah)
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Surat keterangan status lajang sekaligus keterangan pernikahan di luar wilayah domisili.
               </p>
             </div>
             <div className="pt-3 flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
@@ -283,7 +314,7 @@ export const LayananPernikahanView: React.FC = () => {
             <div className="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
               <div className="border-b border-slate-100 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-slate-900">
-                  Formulir {activeTab === 'belum-nikah' ? 'Surat Keterangan Belum Menikah' : 'Permohonan Pengantar Nikah (N1-N4)'}
+                  Formulir {activeTab === 'belum-nikah' ? 'Surat Keterangan Belum Menikah' : activeTab === 'sk-na' ? 'Surat Keterangan NA (Numpang Nikah & Belum Menikah)' : 'Permohonan Pengantar Nikah (N1-N4)'}
                 </h2>
                 <p className="text-xs text-slate-500">
                   Isi biodata kedua calon pengantin secara akurat sesuai data kependudukan
@@ -546,7 +577,7 @@ export const LayananPernikahanView: React.FC = () => {
                       className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-7 py-3 rounded-xl text-xs transition shadow-md flex items-center gap-2"
                     >
                       <Send className="w-4 h-4" />
-                      <span>Ajukan Rekomendasi Nikah (N1-N4)</span>
+                      <span>{activeTab === 'belum-nikah' || activeTab === 'sk-na' ? 'Ajukan Surat Keterangan' : 'Ajukan Rekomendasi Nikah (N1-N4)'}</span>
                     </button>
                   </div>
                 </form>
