@@ -131,23 +131,23 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-100" ref={dropdownRef}>
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-20 gap-4">
+      <div className="max-w-7xl mx-auto w-full px-3 sm:px-6">
+        <div className="flex items-center justify-between h-20 gap-2 sm:gap-4 min-w-0">
           
           {/* 1. Logo & Village Title (Left) */}
           <div 
             onClick={() => handleNavClick('beranda')}
-            className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
+            className="flex items-center gap-2 sm:gap-3 cursor-pointer group select-none min-w-0"
           >
             {/* Crest Shield Badge */}
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 flex items-center justify-center text-white shadow-sm border border-emerald-500/40 shrink-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 flex items-center justify-center text-white shadow-sm border border-emerald-500/40 shrink-0">
               <Shield className="w-5 h-5 text-amber-300 fill-amber-300" />
             </div>
-            <div>
-              <span className="text-base sm:text-lg font-bold tracking-tight text-slate-900 block leading-tight">
+            <div className="min-w-0">
+              <span className="text-sm sm:text-lg font-bold tracking-tight text-slate-900 block leading-tight truncate">
                 Desa Warung Menteng
               </span>
-              <p className="text-xs text-slate-500 font-normal">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-normal truncate">
                 Kec. Cijeruk, Kab. Bogor
               </p>
             </div>
@@ -408,11 +408,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* 4. Right Action: Emergency Button (Red, Hidden on Profil Desa, Potensi Desa, & Pelayanan) */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {!hideKontakDarurat && (
               <button
                 onClick={() => handleNavClick('kontak-darurat')}
-                className="bg-[#b91c1c] hover:bg-red-800 text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 whitespace-nowrap"
+                className="bg-[#b91c1c] hover:bg-red-800 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2 whitespace-nowrap"
               >
                 <PhoneCall className="w-4 h-4" />
                 <span>Kontak Darurat</span>
