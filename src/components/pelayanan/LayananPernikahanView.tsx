@@ -5,14 +5,12 @@ import {
   Send, 
   ShieldCheck, 
   Clock, 
-  FileText,
   Users
 } from 'lucide-react';
 import { saveSuratRequest } from '../../utils/storage';
 
 export const LayananPernikahanView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'formulir-n1-n4' | 'belum-nikah' | 'sk-na'>('formulir-n1-n4');
-  const [guideN, setGuideN] = useState<'n1' | 'n2' | 'n3' | 'n4'>('n1');
   const [submittedCode, setSubmittedCode] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -48,17 +46,12 @@ export const LayananPernikahanView: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const jenisMap: Record<'n1' | 'n2' | 'n3' | 'n4' | 'belum-nikah' | 'sk-na', { label: string; prefix: string }> = {
-      'n1': { label: 'Form N1 - Surat Pengantar Nikah dari Kepala Desa', prefix: 'N1' },
-      'n2': { label: 'Form N2 - Surat Permohonan Kehendak Nikah', prefix: 'N2' },
-      'n3': { label: 'Form N3 - Surat Persetujuan Mempelai', prefix: 'N3' },
-      'n4': { label: 'Form N4 - Surat Izin Orang Tua / Wali', prefix: 'N4' },
+    const jenisMap: Record<'belum-nikah' | 'sk-na', { label: string; prefix: string }> = {
       'belum-nikah': { label: 'Surat Keterangan Belum Pernah Menikah', prefix: 'SKBM' },
       'sk-na': { label: 'Surat Keterangan NA (Belum Menikah & Numpang Nikah)', prefix: 'SKNA' },
     };
 
-    const effectiveTab = activeTab === 'formulir-n1-n4' ? guideN : activeTab;
-    const jenis = jenisMap[effectiveTab];
+    const jenis = jenisMap[activeTab];
     const jenisLabel = jenis.label;
     const prefix = jenis.prefix;
 
@@ -415,57 +408,38 @@ export const LayananPernikahanView: React.FC = () => {
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
             <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-600" />
-              <span>Panduan & Isian Formulir Model N1, N2, N3, dan N4</span>
+              <span>Informasi Formulir Model N1, N2, N3, dan N4</span>
             </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
+              Formulir Model N1, N2, N3, dan N4 adalah perangkat surat administrasi pernikahan yang diterbitkan Desa untuk keperluan pendaftaran akad nikah ke Kantor Urusan Agama (KUA) Kecamatan Cijeruk. Pengajuan berkas dilakukan ke Balai Desa Warung Menteng.
+            </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { key: 'n1', code: 'N1', name: 'Surat Pengantar Nikah', desc: 'Menerangkan biodata lengkap calon mempelai warga desa untuk pengurusan nikah.' },
-                { key: 'n2', code: 'N2', name: 'Surat Permohonan Kehendak Nikah', desc: 'Surat resmi permohonan pendaftaran ke KUA Cijeruk.' },
-                { key: 'n3', code: 'N3', name: 'Surat Persetujuan Mempelai', desc: 'Pernyataan kerelaan kedua calon mempelai tanpa paksaan dari pihak manapun.' },
-                { key: 'n4', code: 'N4', name: 'Surat Izin Orang Tua / Wali', desc: 'Persetujuan resmi dari orang tua kandung atau wali sah.' }
+                { code: 'N1', name: 'Surat Pengantar Nikah dari Kepala Desa', desc: 'Menerangkan biodata lengkap calon mempelai warga desa untuk pengurusan nikah.' },
+                { code: 'N2', name: 'Surat Permohonan Kehendak Nikah', desc: 'Surat resmi permohonan pendaftaran ke KUA Cijeruk.' },
+                { code: 'N3', name: 'Surat Persetujuan Mempelai', desc: 'Pernyataan kerelaan kedua calon mempelai tanpa paksaan dari pihak manapun.' },
+                { code: 'N4', name: 'Surat Izin Orang Tua / Wali', desc: 'Persetujuan resmi dari orang tua kandung atau wali sah.' }
               ].map(item => (
-                <button
-                  key={item.key}
-                  onClick={() => setGuideN(item.key as typeof guideN)}
-                  className={`p-4 rounded-2xl border text-left transition duration-200 ${
-                    guideN === item.key
-                      ? 'bg-emerald-50 border-emerald-600 ring-2 ring-emerald-600/20'
-                      : 'bg-slate-50 border-slate-200 hover:border-emerald-300'
-                  }`}
-                >
-                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md inline-block mb-1 ${
-                    guideN === item.key ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-700'
-                  }`}>
-                    Form {item.code}
-                  </span>
-                  <h4 className="font-bold text-slate-900 text-sm mt-1">{item.name}</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed mt-1">{item.desc}</p>
-                </button>
+                <div key={item.code} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md">
+                      Form {item.code}
+                    </span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-sm">{item.name}</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                </div>
               ))}
             </div>
 
-            <div className="space-y-4">
-              <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <FileText className="w-4 h-4 text-emerald-700" />
-                <span>Isian Form {{
-                  n1: 'N1 - Surat Pengantar Nikah',
-                  n2: 'N2 - Surat Permohonan Kehendak Nikah',
-                  n3: 'N3 - Surat Persetujuan Mempelai',
-                  n4: 'N4 - Surat Izin Orang Tua / Wali'
-                }[guideN]}</span>
-              </h4>
-              <div className="text-xs text-slate-600 leading-relaxed">
-                <p>Lengkapi data berikut untuk lembar yang dipilih. Data yang warga isi akan dicetak petugas pada lembar {{
-                  n1: 'N1 (Surat Pengantar Nikah dari Kepala Desa)',
-                  n2: 'N2 (Surat Permohonan Kehendak Nikah)',
-                  n3: 'N3 (Surat Persetujuan Mempelai)',
-                  n4: 'N4 (Surat Izin Orang Tua / Wali)'
-                }[guideN]} lengkap dengan tanda tangan Kepala Desa Kec. Cijeruk.</p>
+            <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-200/80 text-xs text-emerald-900 space-y-1.5">
+              <div className="flex items-center gap-1.5 font-bold text-emerald-950">
+                <Clock className="w-4 h-4 text-emerald-700" />
+                <span>Catatan</span>
               </div>
-              <div className="bg-white rounded-2xl border border-slate-200 p-5 mt-4">
-                {renderSuratForm()}
-              </div>
+              <p>Permohonan pengisian berkas N1 s.d N4, surat keterangan belum menikah, dan surat keterangan NA dapat dilakukan melalui menu layanan di atas atau langsung ke Balai Desa Warung Menteng / KUA Kecamatan Cijeruk.</p>
             </div>
           </div>
         )}
