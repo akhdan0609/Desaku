@@ -46,7 +46,8 @@ export const LayananPernikahanView: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const jenisMap: Record<'belum-nikah' | 'sk-na', { label: string; prefix: string }> = {
+    const jenisMap: Record<'formulir-n1-n4' | 'belum-nikah' | 'sk-na', { label: string; prefix: string }> = {
+      'formulir-n1-n4': { label: 'Formulir N1, N2, N3, dan N4', prefix: 'NIKAH' },
       'belum-nikah': { label: 'Surat Keterangan Belum Pernah Menikah', prefix: 'SKBM' },
       'sk-na': { label: 'Surat Keterangan NA (Belum Menikah & Numpang Nikah)', prefix: 'SKNA' },
     };
@@ -403,49 +404,7 @@ export const LayananPernikahanView: React.FC = () => {
           ))}
         </div>
 
-        {/* Panduan Formulir N1-N4 */}
-        {activeTab === 'formulir-n1-n4' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-600" />
-              <span>Informasi Formulir Model N1, N2, N3, dan N4</span>
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
-              Formulir Model N1, N2, N3, dan N4 adalah perangkat surat administrasi pernikahan yang diterbitkan Desa untuk keperluan pendaftaran akad nikah ke Kantor Urusan Agama (KUA) Kecamatan Cijeruk. Pengajuan berkas dilakukan ke Balai Desa Warung Menteng.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { code: 'N1', name: 'Surat Pengantar Nikah dari Kepala Desa', desc: 'Menerangkan biodata lengkap calon mempelai warga desa untuk pengurusan nikah.' },
-                { code: 'N2', name: 'Surat Permohonan Kehendak Nikah', desc: 'Surat resmi permohonan pendaftaran ke KUA Cijeruk.' },
-                { code: 'N3', name: 'Surat Persetujuan Mempelai', desc: 'Pernyataan kerelaan kedua calon mempelai tanpa paksaan dari pihak manapun.' },
-                { code: 'N4', name: 'Surat Izin Orang Tua / Wali', desc: 'Persetujuan resmi dari orang tua kandung atau wali sah.' }
-              ].map(item => (
-                <div key={item.code} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md">
-                      Form {item.code}
-                    </span>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  </div>
-                  <h4 className="font-bold text-slate-900 text-sm">{item.name}</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-200/80 text-xs text-emerald-900 space-y-1.5">
-              <div className="flex items-center gap-1.5 font-bold text-emerald-950">
-                <Clock className="w-4 h-4 text-emerald-700" />
-                <span>Catatan</span>
-              </div>
-              <p>Permohonan pengisian berkas N1 s.d N4, surat keterangan belum menikah, dan surat keterangan NA dapat dilakukan melalui menu layanan di atas atau langsung ke Balai Desa Warung Menteng / KUA Kecamatan Cijeruk.</p>
-            </div>
-          </div>
-        )}
-
         {/* Persyaratan & Form Grid */}
-        {activeTab !== 'formulir-n1-n4' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
             {/* Left: Persyaratan Berkas */}
@@ -517,7 +476,6 @@ export const LayananPernikahanView: React.FC = () => {
             </div>
 
           </div>
-        )}
 
       </div>
     </div>
