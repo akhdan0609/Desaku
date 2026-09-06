@@ -33,7 +33,7 @@ export interface KKNMember {
   id: string;
   name: string;
   role: string;
-  division: 'BPH' | 'ACARA' | 'HUMAS' | 'MEDIA';
+  division: 'DPL' | 'BPH' | 'ACARA' | 'HUMAS' | 'MEDIA';
   photo: string;
   prodi?: string;
   quote?: string;
@@ -48,7 +48,7 @@ export const KKN_MEMBERS: KKNMember[] = [
     id: 'dpl-1',
     name: 'Dr. Muhammad Afifi, M.H.',
     role: 'DPL',
-    division: 'BPH',
+    division: 'DPL',
     photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80',
     prodi: 'Dosen Pembimbing Lapangan (UNUSIA)',
     quote: 'Membimbing generasi muda menjadi agen perubahan berakar nilai keislaman dan kebangsaan.',
@@ -895,10 +895,12 @@ export const KKNView: React.FC<KKNViewProps> = ({ onNavigate, initialTab = 'SEMU
               <div>
                 <h3 className="text-lg font-bold text-slate-900">{selectedMember.name}</h3>
                 <span className="text-xs font-extrabold text-emerald-800 bg-emerald-100 px-3 py-0.5 rounded-full inline-block mt-1">
-                  {selectedMember.role} - Divisi {selectedMember.division}
+                  {selectedMember.division === 'DPL'
+                    ? 'Dosen Pembimbing Lapangan (DPL)'
+                    : `${selectedMember.role} - Divisi ${selectedMember.division}`}
                 </span>
                 <p className="text-xs text-slate-500 font-medium mt-1">
-                  {selectedMember.prodi || 'Mahasiswa UNUSIA 2024'}
+                  {selectedMember.prodi || 'Mahasiswa UNUSIA 2026'}
                 </p>
               </div>
             </div>
@@ -920,7 +922,7 @@ export const KKNView: React.FC<KKNViewProps> = ({ onNavigate, initialTab = 'SEMU
               </div>
               <div className="flex items-center justify-between text-slate-600 py-1">
                 <span className="text-slate-400">Status Tugas</span>
-                <span className="font-semibold text-emerald-700">Aktif Lapangan 2024</span>
+                <span className="font-semibold text-emerald-700">Aktif Lapangan 2026</span>
               </div>
             </div>
 
