@@ -43,7 +43,12 @@ export type PageRoute =
   | 'aspirasi-cek-status'
   // KKN
   | 'kkn'
+  | 'kkn-bph'
+  | 'kkn-acara'
+  | 'kkn-humas'
+  | 'kkn-media'
   | 'kkn-latar-belakang'
+  | 'kkn-program-kerja'
   | 'kkn-visi-misi'
   | 'kkn-struktural'
   | 'kkn-galeri'

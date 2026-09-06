@@ -62,15 +62,15 @@ export const KKNVisiMisiView: React.FC = () => {
           <div className="relative z-10 max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 px-3.5 py-1.5 rounded-full text-xs font-semibold">
               <Target className="w-4 h-4 text-amber-300" />
-              <span>Arah Kebijakan & Komitmen Pengabdian</span>
+              <span>Program Kerja & Rencana Aksi Pengabdian</span>
             </div>
             
             <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Visi, Misi & 5 Pilar Program KKN
+              Program Kerja KKN Kelompok Wigata Dharma
             </h1>
             
             <p className="text-slate-200 text-sm sm:text-base leading-relaxed">
-              Panduan strategis pelaksanaan program Kuliah Kerja Nyata Mahasiswa dalam mendorong transformasi Desa Warung Menteng menjadi desa mandiri berdaya saing tinggi.
+              Panduan program kerja terpadu dan rencana aksi nyata mahasiswa KKN UNUSIA Kelompok Wigata Dharma dalam mendorong kemajuan, pemberdayaan ekonomi, dan kesejahteraan warga Desa Warung Menteng.
             </p>
           </div>
         </div>

@@ -52,6 +52,7 @@ import { KKNLatarBelakangView } from './components/kkn/KKNLatarBelakangView';
 import { KKNVisiMisiView } from './components/kkn/KKNVisiMisiView';
 import { KKNStrukturalView } from './components/kkn/KKNStrukturalView';
 import { KKNGaleriView } from './components/kkn/KKNGaleriView';
+import { KKNDivisionView } from './components/kkn/KKNDivisionView';
 
 // Kontak Darurat View
 import { KontakDaruratView } from './components/darurat/KontakDaruratView';
@@ -170,16 +171,25 @@ export default function App() {
         return <AspirasiPengaduanView initialTab="cek-status" />;
 
       // KKN (KULIAH KERJA NYATA)
+      case 'kkn-bph':
+        return <KKNDivisionView initialDivision="BPH" onNavigate={handleNavigate} />;
+      case 'kkn-acara':
+        return <KKNDivisionView initialDivision="ACARA" onNavigate={handleNavigate} />;
+      case 'kkn-humas':
+        return <KKNDivisionView initialDivision="HUMAS" onNavigate={handleNavigate} />;
+      case 'kkn-media':
+        return <KKNDivisionView initialDivision="MEDIA" onNavigate={handleNavigate} />;
       case 'kkn-latar-belakang':
-        return <KKNLatarBelakangView />;
+        return <KKNLatarBelakangView onNavigate={handleNavigate} />;
+      case 'kkn-program-kerja':
       case 'kkn-visi-misi':
         return <KKNVisiMisiView />;
       case 'kkn-struktural':
         return <KKNStrukturalView />;
       case 'kkn-galeri':
-        return <KKNGaleriView />;
+        return <KKNGaleriView onNavigate={handleNavigate} />;
       case 'kkn':
-        return <KKNView />;
+        return <KKNView onNavigate={handleNavigate} />;
 
       // KONTAK DARURAT
       case 'kontak-darurat':

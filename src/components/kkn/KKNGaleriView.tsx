@@ -1,227 +1,336 @@
 import React, { useState } from 'react';
 import { 
-  Camera, 
-  MapPin, 
-  Calendar, 
-  Tag, 
-  Maximize2, 
+  Image as ImageIcon, 
+  AlertTriangle, 
+  ZoomIn, 
   X, 
-  GraduationCap, 
-  Heart,
-  Users
+  ChevronLeft, 
+  ChevronRight,
+  ArrowLeft
 } from 'lucide-react';
+import { PageRoute } from '../../types';
 
-interface FotoKKN {
-  id: string;
-  judul: string;
-  kategori: string;
-  tanggal: string;
-  lokasi: string;
-  deskripsi: string;
-  fotoUrl: string;
+// Images
+import kknHeroPanorama from '../../assets/images/kkn_galeri_hero_panorama_1788606671947.jpg';
+import kknMasakBersama from '../../assets/images/kkn_masak_bersama_1788606697755.jpg';
+import kknMancingKolam from '../../assets/images/kkn_mancing_kolam_1788606715319.jpg';
+import kknMengajarBale from '../../assets/images/kkn_mengajar_bale_1788606733812.jpg';
+import kknKerjaBakti from '../../assets/images/kkn_kerja_bakti_1788606750207.jpg';
+import kknApiUnggun from '../../assets/images/kkn_api_unggun_1788606764323.jpg';
+import kknProkerBudaya from '../../assets/images/kkn_proker_budaya_1788606079432.jpg';
+import kknProkerKekerasan from '../../assets/images/kkn_proker_kekerasan_1788606094172.jpg';
+import kknProkerWebsite from '../../assets/images/kkn_proker_website_1788606042072.jpg';
+import kknProkerCyberbullying from '../../assets/images/kkn_proker_cyberbullying_1788606061840.jpg';
+import kknActivityUmkm from '../../assets/images/kkn_activity_umkm_1788604303052.jpg';
+import kknHeroGroup from '../../assets/images/kkn_hero_group_1788604287174.jpg';
+import kknTeamMedia from '../../assets/images/kkn_team_media_1788605216631.jpg';
+
+interface GalleryPhoto {
+  id: number;
+  src: string;
+  title: string;
+  caption: string;
 }
 
-export const KKNGaleriView: React.FC = () => {
-  const [selectedKategori, setSelectedKategori] = useState('Semua');
-  const [activeModalFoto, setActiveModalFoto] = useState<FotoKKN | null>(null);
+interface KKNGaleriViewProps {
+  onNavigate?: (page: PageRoute) => void;
+}
 
-  const daftarFotoKKN: FotoKKN[] = [
+export const KKNGaleriView: React.FC<KKNGaleriViewProps> = ({ onNavigate }) => {
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+
+  // 12 photos matching the 4x3 grid in the user's reference image
+  const galleryPhotos: GalleryPhoto[] = [
+    // Row 1
     {
-      id: 'kkn-g-1',
-      judul: 'Penyelenggaraan Rumah Belajar Ceria Bersama Anak-Anak Dusun Cimenteng',
-      kategori: 'Pendidikan',
-      tanggal: '10 Juli 2024',
-      lokasi: 'Posko Dusun I Cimenteng',
-      deskripsi: 'Kegiatan bimbingan belajar membaca, berhitung cepat, dan pengenalan sains interaktif yang disambut antusias oleh anak-anak usia SD.',
-      fotoUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80'
+      id: 1,
+      src: kknMasakBersama,
+      title: 'Memasak Bersama di Dapur Posko',
+      caption: 'Mahasiswa KKN bersama-sama menyiapkan santapan dan konsumsi kegiatan pengabdian di dapur posko.'
     },
     {
-      id: 'kkn-g-2',
-      judul: 'Workshop Desain Kemasan & Pemasaran Digital Produk Olahan Kopi Salak',
-      kategori: 'UMKM & Ekonomi',
-      tanggal: '18 Juli 2024',
-      lokasi: 'Pendopo Balai Desa',
-      deskripsi: 'Pelatihan pembuatan label produk modern, foto produk menggunakan smartphone, serta pendaftaran Google Maps Bisnis untuk KWT Melati.',
-      fotoUrl: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80'
+      id: 2,
+      src: kknMancingKolam,
+      title: 'Observasi Potensi Kolam Ikan Air Tawar',
+      caption: 'Mahasiswa berinteraksi santai bersama warga di tepian kolam perikanan air tawar Desa Warung Menteng.'
     },
     {
-      id: 'kkn-g-3',
-      judul: 'Penyuluhan Manajemen Kualitas Air Bersama Pokdakan Tirta Menteng',
-      kategori: 'Perikanan',
-      tanggal: '24 Juli 2024',
-      lokasi: 'Kolam Budidaya Dusun I',
-      deskripsi: 'Pengukuran pH air, suhu, dan oksigen terlarut (DO) serta diskusi formulasi pakan apung mandiri guna menekan biaya operasional.',
-      fotoUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80'
+      id: 3,
+      src: kknMengajarBale,
+      title: 'Bimbingan Belajar di Saung Desa',
+      caption: 'Sesi belajar membaca dan bimbingan edukatif bersama adik-adik desa di saung terbuka yang asri.'
     },
     {
-      id: 'kkn-g-4',
-      judul: 'Aksi Bersih Aliran Sungai dan Sosialisasi Pemilahan Sampah Organik',
-      kategori: 'Lingkungan',
-      tanggal: '01 Agustus 2024',
-      lokasi: 'Bantaran Sungai Dusun Pasir',
-      deskripsi: 'Kerja bakti gotong royong pembersihan sampah plastik di saluran irigasi bersama Karang Taruna dan warga Dusun II.',
-      fotoUrl: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?auto=format&fit=crop&w=1200&q=80'
+      id: 4,
+      src: kknKerjaBakti,
+      title: 'Kerja Bakti Kebersihan Lingkungan',
+      caption: 'Aksi gotong royong mahasiswa KKN membersihkan pekarangan dan halaman sekitar rumah warga menggunakan sapu lidi.'
+    },
+
+    // Row 2
+    {
+      id: 5,
+      src: 'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?auto=format&fit=crop&w=700&q=80',
+      title: 'Olahraga Bola Voli Bersama Pemuda Desa',
+      caption: 'Pertandingan persahabatan bola voli di lapangan tanah desa mempererat keakraban dengan Karang Taruna.'
     },
     {
-      id: 'kkn-g-5',
-      judul: 'Pendampingan Posyandu Balita & Skrining Tumbuh Kembang Cegah Stunting',
-      kategori: 'Kesehatan',
-      tanggal: '08 Agustus 2024',
-      lokasi: 'Posyandu Mawar II',
-      deskripsi: 'Membantu kader posyandu dalam pencatatan digital tinggi badan, berat badan, serta pembagian makanan tambahan bergizi (PMT).',
-      fotoUrl: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1200&q=80'
+      id: 6,
+      src: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=700&q=80',
+      title: 'Persiapan Masak Bersama Ibu-Ibu PKK',
+      caption: 'Kolaborasi hangat mengolah sayuran segar dan bumbu dapur tradisional bersama ibu-ibu kader desa.'
     },
     {
-      id: 'kkn-g-6',
-      judul: 'Malam Keakraban & Pentas Seni Kolaborasi Mahasiswa dengan Warga',
-      kategori: 'Budaya & Kebersamaan',
-      tanggal: '16 Agustus 2024',
-      lokasi: 'Halaman Balai Desa',
-      deskripsi: 'Penampilan tari Jaipong, calung Sunda, dan pemutaran video dokumenter kilas balik pengabdian KKN selama di Desa Warung Menteng.',
-      fotoUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1200&q=80'
+      id: 7,
+      src: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=700&q=80',
+      title: 'Mendongeng & Membaca Buku Ceria',
+      caption: 'Mahasiswi KKN mendampingi anak-anak desa membaca buku cerita edukatif di beranda rumah warga.'
+    },
+    {
+      id: 8,
+      src: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=700&q=80',
+      title: 'Aksi Penanaman Bibit Penghijauan',
+      caption: 'Penyerahan dan penanaman bibit pohon di lahan kebun desa sebagai wujud pelestarian lingkungan.'
+    },
+
+    // Row 3
+    {
+      id: 9,
+      src: kknProkerKekerasan,
+      title: 'Sosialisasi & Rembuk Warga di Balai',
+      caption: 'Pertemuan interaktif dan pemaparan materi perlindungan hak anak serta perempuan di Balai Warga.'
+    },
+    {
+      id: 10,
+      src: kknApiUnggun,
+      title: 'Malam Keakraban di Depan Api Unggun',
+      caption: 'Hangatnya obrolan malam santai dan refleksi mingguan di sekeliling api unggun bersama rekan mahasiswa.'
+    },
+    {
+      id: 11,
+      src: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=700&q=80',
+      title: 'Pembersihan Saluran Air & Sampah',
+      caption: 'Kerja bakti pembersihan saluran drainase dan halaman lingkungan menggunakan gerobak dorong.'
+    },
+    {
+      id: 12,
+      src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=700&q=80',
+      title: 'Eksplorasi Kerajinan & Pengemasan Produk',
+      caption: 'Mahasiswa KKN berkumpul melingkar meracik kemasan kreatif produk khas hasil bumi desa.'
     }
   ];
 
-  const kategoriList = ['Semua', 'Pendidikan', 'UMKM & Ekonomi', 'Perikanan', 'Lingkungan', 'Kesehatan', 'Budaya & Kebersamaan'];
+  const handlePrev = () => {
+    if (selectedPhotoIndex !== null) {
+      setSelectedPhotoIndex((selectedPhotoIndex - 1 + galleryPhotos.length) % galleryPhotos.length);
+    }
+  };
 
-  const filteredFoto = daftarFotoKKN.filter(item => {
-    return selectedKategori === 'Semua' || item.kategori === selectedKategori;
-  });
+  const handleNext = () => {
+    if (selectedPhotoIndex !== null) {
+      setSelectedPhotoIndex((selectedPhotoIndex + 1) % galleryPhotos.length);
+    }
+  };
+
+  const activePhoto = selectedPhotoIndex !== null ? galleryPhotos[selectedPhotoIndex] : null;
 
   return (
-    <div className="bg-slate-50 min-h-screen py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
-        
-        {/* Header Banner */}
-        <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-emerald-950 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
-          <div className="absolute right-0 top-0 bottom-0 w-1/3 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
-          
-          <div className="relative z-10 max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 px-3.5 py-1.5 rounded-full text-xs font-semibold">
-              <Camera className="w-4 h-4 text-amber-300" />
-              <span>Dokumentasi Pengabdian Mahasiswa</span>
-            </div>
-            
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Galeri Kegiatan KKN Warung Menteng
-            </h1>
-            
-            <p className="text-slate-200 text-sm sm:text-base leading-relaxed">
-              Momen hangat dan dokumentasi visual program pengabdian mahasiswa KKN bersama warga Desa Warung Menteng dari berbagai dusun.
-            </p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-white text-slate-800 font-sans pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        {/* Filter Toolbar */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex flex-wrap items-center gap-2">
-          {kategoriList.map(kat => (
+        {/* Top Breadcrumb & Optional Back Navigation */}
+        {onNavigate && (
+          <div className="flex items-center justify-between text-xs text-slate-500 pb-1">
             <button
-              key={kat}
-              onClick={() => setSelectedKategori(kat)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
-                selectedKategori === kat
-                  ? 'bg-emerald-700 text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
+              onClick={() => onNavigate('kkn')}
+              className="inline-flex items-center gap-1.5 text-emerald-800 hover:text-emerald-950 font-semibold transition cursor-pointer"
             >
-              {kat}
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Kembali ke Portal KKN</span>
             </button>
-          ))}
-        </div>
-
-        {/* Grid Foto */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFoto.map(item => (
-            <div
-              key={item.id}
-              onClick={() => setActiveModalFoto(item)}
-              className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden cursor-pointer group hover:shadow-md transition flex flex-col justify-between"
-            >
-              <div>
-                <div className="h-56 relative overflow-hidden bg-slate-100">
-                  <img
-                    src={item.fotoUrl}
-                    alt={item.judul}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4">
-                    <span className="text-white text-xs font-bold flex items-center gap-1.5">
-                      <Maximize2 className="w-4 h-4 text-emerald-400" />
-                      <span>Klik untuk memperbesar</span>
-                    </span>
-                  </div>
-                  <span className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-1 rounded-lg">
-                    {item.kategori}
-                  </span>
-                </div>
-
-                <div className="p-5 space-y-2">
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-emerald-800 transition">
-                    {item.judul}
-                  </h3>
-                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                    {item.deskripsi}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-5 pt-0 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-600" />
-                  {item.tanggal}
-                </span>
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                  {item.lokasi}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Modal Lightbox Foto */}
-        {activeModalFoto && (
-          <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-200">
-              <button
-                onClick={() => setActiveModalFoto(null)}
-                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-slate-900/70 text-white flex items-center justify-center hover:bg-slate-900 transition"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="max-h-[500px] bg-slate-900 overflow-hidden flex items-center justify-center">
-                <img
-                  src={activeModalFoto.fotoUrl}
-                  alt={activeModalFoto.judul}
-                  className="w-full h-full object-contain max-h-[500px]"
-                />
-              </div>
-
-              <div className="p-6 space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-md">
-                    {activeModalFoto.kategori}
-                  </span>
-                  <span className="text-xs text-slate-500">
-                    {activeModalFoto.tanggal} • {activeModalFoto.lokasi}
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-bold text-slate-900">
-                  {activeModalFoto.judul}
-                </h3>
-
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {activeModalFoto.deskripsi}
-                </p>
-              </div>
-            </div>
+            <span>Beranda / Galeri KKN</span>
           </div>
         )}
 
+        {/* 1. HERO BANNER: EXACT MATCH TO REFERENCE IMAGE */}
+        <div className="relative rounded-3xl sm:rounded-[32px] overflow-hidden shadow-sm h-64 sm:h-72 lg:h-80 border border-slate-200/80">
+          
+          {/* Panoramic background image */}
+          <img
+            src={kknHeroPanorama}
+            alt="Pemandangan Asri Terasering Sawah dan Perbukitan Desa Warung Menteng"
+            className="w-full h-full object-cover object-center"
+          />
+
+          {/* Deep green gradient overlay from left */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#032e1c]/95 via-[#064228]/85 to-black/20" />
+
+          {/* Banner Content Container */}
+          <div className="absolute inset-0 p-6 sm:p-10 lg:p-12 flex flex-col justify-between">
+            
+            {/* Top Row: Pill Badge on Left, Cursive Script on Right */}
+            <div className="flex items-start justify-between">
+              
+              {/* Badge "GALERI KKN" */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/25 border border-white/20 text-white backdrop-blur-xs shadow-xs">
+                <ImageIcon className="w-3.5 h-3.5 text-white" />
+                <span className="text-[10px] sm:text-[11px] font-extrabold tracking-wider uppercase">
+                  GALERI KKN
+                </span>
+              </div>
+
+              {/* Cursive / Calligraphic Script on Top-Right */}
+              <div className="text-right text-white select-none hidden sm:block">
+                <p className="font-serif italic text-lg sm:text-xl md:text-2xl font-normal leading-tight text-white/95 drop-shadow-md">
+                  Bersama Masyarakat
+                </p>
+                <p className="font-serif italic text-lg sm:text-xl md:text-2xl font-normal leading-tight text-white/95 drop-shadow-md">
+                  Membangun Desa
+                </p>
+              </div>
+
+            </div>
+
+            {/* Bottom Row: Main Title & Subtitle */}
+            <div className="max-w-2xl space-y-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug drop-shadow-sm">
+                Galeri KKN Desa Warung Menteng
+              </h1>
+              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed max-w-xl">
+                Merekam setiap langkah, kebersamaan, dan pengabdian kami selama berada di Desa Warung Menteng.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* 2. WARNING BANNER: EXACT MATCH TO REFERENCE IMAGE */}
+        <div className="bg-[#fffbeb] border border-[#fde68a] rounded-2xl p-4 sm:p-5 shadow-2xs">
+          <div className="flex items-start gap-3 sm:gap-4">
+            
+            {/* Warning Triangle Icon */}
+            <div className="shrink-0 mt-0.5">
+              <div className="w-9 h-9 rounded-xl bg-amber-400/20 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-amber-500 fill-amber-500" />
+              </div>
+            </div>
+
+            {/* Warning Text */}
+            <div className="space-y-1 text-slate-800">
+              <h3 className="text-sm sm:text-[15px] font-extrabold text-slate-900 tracking-tight leading-snug">
+                Peringatan:
+              </h3>
+              <p className="text-xs sm:text-[13px] text-slate-700 leading-relaxed text-justify">
+                Fitur galeri ini berisi dokumentasi kegiatan KKN Kelompok Wigata Dharma di Desa Warung Menteng. Dilarang menggunakan, menyalin, atau menyebarkan foto-foto ini untuk kepentingan pribadi, komersial, atau tindakan yang melanggar hak cipta tanpa izin dari pihak terkait. Penggunaan yang <strong className="font-extrabold text-slate-900">tidak bertanggung jawab</strong> dapat dikenai sanksi sesuai peraturan yang berlaku.
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        {/* 3. SECTION HEADER WITH GREEN VERTICAL ACCENT */}
+        <div className="pt-2 space-y-1">
+          <div className="flex items-center gap-2.5">
+            <div className="w-1.5 h-6 bg-[#0a3828] rounded-full shrink-0" />
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#0a3828] tracking-tight">
+              Foto-foto Kegiatan KKN
+            </h2>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-600 pl-4">
+            Dokumentasi berbagai kegiatan dan momen kebersamaan kami selama KKN di Desa Warung Menteng.
+          </p>
+        </div>
+
+        {/* 4. 4x3 PHOTO GRID (12 PHOTOS EXACTLY AS IN SCREENSHOT) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 pt-1">
+          {galleryPhotos.map((photo, idx) => (
+            <div
+              key={photo.id}
+              onClick={() => setSelectedPhotoIndex(idx)}
+              className="group relative aspect-4/3 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-2xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+            >
+              <img
+                src={photo.src}
+                alt={photo.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              
+              {/* Hover overlay with Zoom Icon */}
+              <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-3">
+                <div className="w-10 h-10 rounded-full bg-white/90 text-[#0a3828] flex items-center justify-center shadow-md transform group-hover:scale-110 transition-transform">
+                  <ZoomIn className="w-5 h-5" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
+
+      {/* FULLSCREEN LIGHTBOX MODAL */}
+      {activePhoto && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-xs p-4 animate-in fade-in duration-150"
+          onClick={() => setSelectedPhotoIndex(null)}
+        >
+          <div 
+            className="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl border border-slate-100 relative flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-4 bg-slate-900 text-white flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300">
+                Foto {selectedPhotoIndex! + 1} dari {galleryPhotos.length}
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handlePrev}
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white transition cursor-pointer"
+                  title="Foto sebelumnya"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white transition cursor-pointer"
+                  title="Foto selanjutnya"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setSelectedPhotoIndex(null)}
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-700 text-white transition ml-2 cursor-pointer"
+                  title="Tutup"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Image Display */}
+            <div className="bg-black flex items-center justify-center overflow-hidden flex-1 min-h-[260px] max-h-[60vh]">
+              <img
+                src={activePhoto.src}
+                alt={activePhoto.title}
+                className="w-full h-full object-contain max-h-[60vh]"
+              />
+            </div>
+
+            {/* Modal Caption */}
+            <div className="p-5 bg-white space-y-1.5 border-t border-slate-100">
+              <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                {activePhoto.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                {activePhoto.caption}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

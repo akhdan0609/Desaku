@@ -33,6 +33,32 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleDropdownMouseEnter = (menuName: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setOpenDropdown(menuName);
+  };
+
+  const handleDropdownMouseLeave = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 150);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const handleStorage = () => {
@@ -107,8 +133,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { title: 'Galeri Foto Desa', desc: 'Dokumentasi visual foto dan video agenda kegiatan desa', page: 'berita-galeri' as PageRoute, tag: 'Berita' },
     // KKN
     { title: 'Latar Belakang KKN', desc: 'Latar belakang pengabdian mahasiswa di Warung Menteng', page: 'kkn-latar-belakang' as PageRoute, tag: 'KKN' },
-    { title: 'Visi dan Misi KKN', desc: 'Visi, misi, dan 5 pilar program unggulan mahasiswa', page: 'kkn-visi-misi' as PageRoute, tag: 'KKN' },
-    { title: 'Struktural Tim KKN', desc: 'Susunan organisasi mahasiswa KKN dan posko dusun', page: 'kkn-struktural' as PageRoute, tag: 'KKN' },
+    { title: 'Program Kerja KKN', desc: 'Program kerja dan rencana pengabdian mahasiswa KKN', page: 'kkn-program-kerja' as PageRoute, tag: 'KKN' },
     { title: 'Galeri Kegiatan KKN', desc: 'Dokumentasi foto kegiatan bimbel, workshop, dan penyuluhan', page: 'kkn-galeri' as PageRoute, tag: 'KKN' },
     // Kontak Darurat
     { title: 'Kontak Darurat 24 Jam', desc: 'Ambulans desa, Damkar, BPBD, Bhabinkamtibmas, Babinsa', page: 'kontak-darurat' as PageRoute, tag: 'Darurat' }
@@ -117,9 +142,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isProfilPage = activePage === 'profil-tentang' || activePage === 'profil-sejarah' || activePage === 'profil-pemerintahan' || activePage === 'profil-anggaran' || activePage === 'profil-lembaga' || activePage === 'profil-demografi' || activePage.startsWith('profil-');
   const isPotensiPage = activePage === 'potensi-desa' || activePage.startsWith('potensi-');
   const isPelayananPage = activePage === 'pelayanan-desa' || activePage.startsWith('pelayanan-');
+  const isKKNPage = activePage.startsWith('kkn');
 
-  // Sembunyikan fitur pencarian pada Profil Desa dan Potensi Desa
-  const hideSearch = isProfilPage || isPotensiPage;
+  // Sembunyikan fitur pencarian pada Profil Desa, Potensi Desa, dan seluruh fitur KKN
+  const hideSearch = isProfilPage || isPotensiPage || isKKNPage;
 
   // Sembunyikan fitur kontak darurat pada Profil Desa, Potensi Desa, dan Pelayanan
   const hideKontakDarurat = isProfilPage || isPotensiPage || isPelayananPage;
@@ -185,28 +211,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {/* PROFIL DESA Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'profil' ? null : 'profil')}
-                className={`py-2 flex items-center gap-1 transition uppercase tracking-wide text-xs ${
-                  isProfilActive
-                    ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
-                    : 'text-slate-800 hover:text-emerald-700 font-bold'
-                }`}
-              >
-                <span>Profil Desa</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'profil' ? 'rotate-180 text-emerald-700' : 'text-slate-500'}`} />
-              </button>
+            <div 
+              className="relative"
+              onMouseEnter={() => handleDropdownMouseEnter('profil')}
+              onMouseLeave={handleDropdownMouseLeave}
+            >
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleNavClick('profil-tentang')}
+                  className={`py-2 transition uppercase tracking-wide text-xs cursor-pointer ${
+                    isProfilActive
+                      ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
+                      : 'text-slate-800 hover:text-emerald-700 font-bold'
+                  }`}
+                >
+                  <span>Profil Desa</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDropdown(openDropdown === 'profil' ? null : 'profil');
+                  }}
+                  className="p-1 text-slate-500 hover:text-emerald-700 cursor-pointer"
+                  aria-label="Buka menu Profil Desa"
+                >
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'profil' ? 'rotate-180 text-emerald-700' : ''}`} />
+                </button>
+              </div>
 
               {openDropdown === 'profil' && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <button
-                    onClick={() => handleNavClick('profil-tentang')}
-                    className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
-                  >
-                    <span>Tentang Desa</span>
-                    <ArrowRight className="w-3 h-3 text-slate-400" />
-                  </button>
+                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
                   <button
                     onClick={() => handleNavClick('profil-pemerintahan')}
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
@@ -226,28 +260,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* POTENSI DESA Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'potensi' ? null : 'potensi')}
-                className={`py-2 flex items-center gap-1 transition uppercase tracking-wide text-xs ${
-                  isPotensiActive
-                    ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
-                    : 'text-slate-800 hover:text-emerald-700 font-bold'
-                }`}
-              >
-                <span>Potensi Desa</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'potensi' ? 'rotate-180 text-emerald-700' : 'text-slate-500'}`} />
-              </button>
+            <div 
+              className="relative"
+              onMouseEnter={() => handleDropdownMouseEnter('potensi')}
+              onMouseLeave={handleDropdownMouseLeave}
+            >
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleNavClick('potensi-desa')}
+                  className={`py-2 transition uppercase tracking-wide text-xs cursor-pointer ${
+                    isPotensiActive
+                      ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
+                      : 'text-slate-800 hover:text-emerald-700 font-bold'
+                  }`}
+                >
+                  <span>Potensi Desa</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDropdown(openDropdown === 'potensi' ? null : 'potensi');
+                  }}
+                  className="p-1 text-slate-500 hover:text-emerald-700 cursor-pointer"
+                  aria-label="Buka menu Potensi Desa"
+                >
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'potensi' ? 'rotate-180 text-emerald-700' : ''}`} />
+                </button>
+              </div>
 
               {openDropdown === 'potensi' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <button
-                    onClick={() => handleNavClick('potensi-desa')}
-                    className="w-full text-left px-4 py-2.5 text-xs text-emerald-800 bg-emerald-50/50 hover:bg-emerald-100/70 flex items-center justify-between font-bold border-b border-slate-100"
-                  >
-                    <span>Ikhtisar Potensi Desa</span>
-                    <ArrowRight className="w-3 h-3 text-emerald-700" />
-                  </button>
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
                   <button
                     onClick={() => handleNavClick('potensi-destinasi')}
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
@@ -281,28 +323,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* PELAYANAN Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'pelayanan' ? null : 'pelayanan')}
-                className={`py-2 flex items-center gap-1 transition uppercase tracking-wide text-xs ${
-                  isPelayananActive
-                    ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
-                    : 'text-slate-800 hover:text-emerald-700 font-bold'
-                }`}
-              >
-                <span>Pelayanan</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'pelayanan' ? 'rotate-180 text-emerald-700' : 'text-slate-500'}`} />
-              </button>
+            <div 
+              className="relative"
+              onMouseEnter={() => handleDropdownMouseEnter('pelayanan')}
+              onMouseLeave={handleDropdownMouseLeave}
+            >
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleNavClick('pelayanan-desa')}
+                  className={`py-2 transition uppercase tracking-wide text-xs cursor-pointer ${
+                    isPelayananActive
+                      ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
+                      : 'text-slate-800 hover:text-emerald-700 font-bold'
+                  }`}
+                >
+                  <span>Pelayanan</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDropdown(openDropdown === 'pelayanan' ? null : 'pelayanan');
+                  }}
+                  className="p-1 text-slate-500 hover:text-emerald-700 cursor-pointer"
+                  aria-label="Buka menu Pelayanan"
+                >
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'pelayanan' ? 'rotate-180 text-emerald-700' : ''}`} />
+                </button>
+              </div>
 
               {openDropdown === 'pelayanan' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <button
-                    onClick={() => handleNavClick('pelayanan-desa')}
-                    className="w-full text-left px-4 py-2.5 text-xs text-emerald-800 bg-emerald-50/50 hover:bg-emerald-100/70 flex items-center justify-between font-bold border-b border-slate-100"
-                  >
-                    <span>Ikhtisar Pelayanan Desa</span>
-                    <ArrowRight className="w-3 h-3 text-emerald-700" />
-                  </button>
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
                   <button
                     onClick={() => handleNavClick('pelayanan-surat-keterangan')}
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
@@ -329,21 +379,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* BERITA Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'berita' ? null : 'berita')}
-                className={`py-2 flex items-center gap-1 transition uppercase tracking-wide text-xs ${
-                  isBeritaActive
-                    ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
-                    : 'text-slate-800 hover:text-emerald-700 font-bold'
-                }`}
-              >
-                <span>Berita</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'berita' ? 'rotate-180 text-emerald-700' : 'text-slate-500'}`} />
-              </button>
+            <div 
+              className="relative"
+              onMouseEnter={() => handleDropdownMouseEnter('berita')}
+              onMouseLeave={handleDropdownMouseLeave}
+            >
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleNavClick('berita-press-release')}
+                  className={`py-2 transition uppercase tracking-wide text-xs cursor-pointer ${
+                    isBeritaActive
+                      ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
+                      : 'text-slate-800 hover:text-emerald-700 font-bold'
+                  }`}
+                >
+                  <span>Berita</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDropdown(openDropdown === 'berita' ? null : 'berita');
+                  }}
+                  className="p-1 text-slate-500 hover:text-emerald-700 cursor-pointer"
+                  aria-label="Buka menu Berita"
+                >
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'berita' ? 'rotate-180 text-emerald-700' : ''}`} />
+                </button>
+              </div>
 
               {openDropdown === 'berita' && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
                   <button
                     onClick={() => handleNavClick('berita-press-release')}
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
@@ -363,21 +428,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* KKN Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setOpenDropdown(openDropdown === 'kkn' ? null : 'kkn')}
-                className={`py-2 flex items-center gap-1 transition uppercase tracking-wide text-xs ${
-                  isKKNActive
-                    ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
-                    : 'text-slate-800 hover:text-emerald-700 font-bold'
-                }`}
-              >
-                <span>KKN</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'kkn' ? 'rotate-180 text-emerald-700' : 'text-slate-500'}`} />
-              </button>
+            <div 
+              className="relative"
+              onMouseEnter={() => handleDropdownMouseEnter('kkn')}
+              onMouseLeave={handleDropdownMouseLeave}
+            >
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleNavClick('kkn')}
+                  className={`py-2 transition uppercase tracking-wide text-xs cursor-pointer ${
+                    isKKNActive
+                      ? 'text-emerald-800 font-extrabold border-b-2 border-emerald-700'
+                      : 'text-slate-800 hover:text-emerald-700 font-bold'
+                  }`}
+                >
+                  <span>KKN</span>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenDropdown(openDropdown === 'kkn' ? null : 'kkn');
+                  }}
+                  className="p-1 text-slate-500 hover:text-emerald-700 cursor-pointer"
+                  aria-label="Buka menu KKN"
+                >
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${openDropdown === 'kkn' ? 'rotate-180 text-emerald-700' : ''}`} />
+                </button>
+              </div>
 
               {openDropdown === 'kkn' && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200/90 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 before:content-[''] before:absolute before:-top-3 before:left-0 before:right-0 before:h-3">
                   <button
                     onClick={() => handleNavClick('kkn-latar-belakang')}
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
@@ -386,17 +466,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <ArrowRight className="w-3 h-3 text-slate-400" />
                   </button>
                   <button
-                    onClick={() => handleNavClick('kkn-visi-misi')}
+                    onClick={() => handleNavClick('kkn-program-kerja')}
                     className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
                   >
-                    <span>Visi dan Misi</span>
-                    <ArrowRight className="w-3 h-3 text-slate-400" />
-                  </button>
-                  <button
-                    onClick={() => handleNavClick('kkn-struktural')}
-                    className="w-full text-left px-4 py-2.5 text-xs text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center justify-between font-medium"
-                  >
-                    <span>Struktural</span>
+                    <span>Program Kerja</span>
                     <ArrowRight className="w-3 h-3 text-slate-400" />
                   </button>
                   <button
@@ -582,21 +655,25 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Profil Desa Mobile Accordion */}
           <div className="border border-slate-200/80 rounded-2xl overflow-hidden">
-            <button
-              onClick={() => setOpenDropdown(openDropdown === 'm-profil' ? null : 'm-profil')}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 text-sm font-bold text-slate-800 bg-slate-50/70"
-            >
-              <span>Profil Desa</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-profil' ? 'rotate-180 text-emerald-700' : 'text-slate-400'}`} />
-            </button>
+            <div className="flex items-center justify-between bg-slate-50/70 pr-2">
+              <button
+                onClick={() => handleNavClick('profil-tentang')}
+                className={`flex-1 text-left px-3.5 py-2.5 text-sm font-bold transition ${
+                  isProfilActive ? 'text-emerald-800' : 'text-slate-800'
+                }`}
+              >
+                Profil Desa
+              </button>
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'm-profil' ? null : 'm-profil')}
+                className="p-2 text-slate-400 hover:text-emerald-700 cursor-pointer"
+                aria-label="Buka submenu Profil Desa"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-profil' ? 'rotate-180 text-emerald-700' : ''}`} />
+              </button>
+            </div>
             {openDropdown === 'm-profil' && (
               <div className="p-2 space-y-1 bg-white border-t border-slate-100">
-                <button
-                  onClick={() => handleNavClick('profil-tentang')}
-                  className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
-                >
-                  Tentang Desa
-                </button>
                 <button
                   onClick={() => handleNavClick('profil-pemerintahan')}
                   className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
@@ -615,21 +692,25 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Potensi Desa Mobile Accordion */}
           <div className="border border-slate-200/80 rounded-2xl overflow-hidden">
-            <button
-              onClick={() => setOpenDropdown(openDropdown === 'm-potensi' ? null : 'm-potensi')}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 text-sm font-bold text-slate-800 bg-slate-50/70"
-            >
-              <span>Potensi Desa</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-potensi' ? 'rotate-180 text-emerald-700' : 'text-slate-400'}`} />
-            </button>
+            <div className="flex items-center justify-between bg-slate-50/70 pr-2">
+              <button
+                onClick={() => handleNavClick('potensi-desa')}
+                className={`flex-1 text-left px-3.5 py-2.5 text-sm font-bold transition ${
+                  isPotensiActive ? 'text-emerald-800' : 'text-slate-800'
+                }`}
+              >
+                Potensi Desa
+              </button>
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'm-potensi' ? null : 'm-potensi')}
+                className="p-2 text-slate-400 hover:text-emerald-700 cursor-pointer"
+                aria-label="Buka submenu Potensi Desa"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-potensi' ? 'rotate-180 text-emerald-700' : ''}`} />
+              </button>
+            </div>
             {openDropdown === 'm-potensi' && (
               <div className="p-2 space-y-1 bg-white border-t border-slate-100">
-                <button
-                  onClick={() => handleNavClick('potensi-desa')}
-                  className="w-full text-left px-3 py-2 text-xs rounded-lg text-emerald-800 font-bold bg-emerald-50/70 hover:bg-emerald-100"
-                >
-                  Ikhtisar Potensi Desa
-                </button>
                 <button
                   onClick={() => handleNavClick('potensi-destinasi')}
                   className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
@@ -660,21 +741,25 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Pelayanan Mobile Accordion */}
           <div className="border border-slate-200/80 rounded-2xl overflow-hidden">
-            <button
-              onClick={() => setOpenDropdown(openDropdown === 'm-pelayanan' ? null : 'm-pelayanan')}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 text-sm font-bold text-slate-800 bg-slate-50/70"
-            >
-              <span>Pelayanan</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-pelayanan' ? 'rotate-180 text-emerald-700' : 'text-slate-400'}`} />
-            </button>
+            <div className="flex items-center justify-between bg-slate-50/70 pr-2">
+              <button
+                onClick={() => handleNavClick('pelayanan-desa')}
+                className={`flex-1 text-left px-3.5 py-2.5 text-sm font-bold transition ${
+                  isPelayananActive ? 'text-emerald-800' : 'text-slate-800'
+                }`}
+              >
+                Pelayanan
+              </button>
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'm-pelayanan' ? null : 'm-pelayanan')}
+                className="p-2 text-slate-400 hover:text-emerald-700 cursor-pointer"
+                aria-label="Buka submenu Pelayanan"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-pelayanan' ? 'rotate-180 text-emerald-700' : ''}`} />
+              </button>
+            </div>
             {openDropdown === 'm-pelayanan' && (
               <div className="p-2 space-y-1 bg-white border-t border-slate-100">
-                <button
-                  onClick={() => handleNavClick('pelayanan-desa')}
-                  className="w-full text-left px-3 py-2 text-xs rounded-lg text-emerald-800 font-bold bg-emerald-50/70 hover:bg-emerald-100"
-                >
-                  Ikhtisar Pelayanan Desa
-                </button>
                 <button
                   onClick={() => handleNavClick('pelayanan-surat-keterangan')}
                   className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
@@ -699,13 +784,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Berita Mobile Accordion */}
           <div className="border border-slate-200/80 rounded-2xl overflow-hidden">
-            <button
-              onClick={() => setOpenDropdown(openDropdown === 'm-berita' ? null : 'm-berita')}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 text-sm font-bold text-slate-800 bg-slate-50/70"
-            >
-              <span>Berita</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-berita' ? 'rotate-180 text-emerald-700' : 'text-slate-400'}`} />
-            </button>
+            <div className="flex items-center justify-between bg-slate-50/70 pr-2">
+              <button
+                onClick={() => handleNavClick('berita-press-release')}
+                className={`flex-1 text-left px-3.5 py-2.5 text-sm font-bold transition ${
+                  isBeritaActive ? 'text-emerald-800' : 'text-slate-800'
+                }`}
+              >
+                Berita
+              </button>
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'm-berita' ? null : 'm-berita')}
+                className="p-2 text-slate-400 hover:text-emerald-700 cursor-pointer"
+                aria-label="Buka submenu Berita"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-berita' ? 'rotate-180 text-emerald-700' : ''}`} />
+              </button>
+            </div>
             {openDropdown === 'm-berita' && (
               <div className="p-2 space-y-1 bg-white border-t border-slate-100">
                 <button
@@ -726,13 +821,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* KKN Mobile Accordion */}
           <div className="border border-slate-200/80 rounded-2xl overflow-hidden">
-            <button
-              onClick={() => setOpenDropdown(openDropdown === 'm-kkn' ? null : 'm-kkn')}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 text-sm font-bold text-slate-800 bg-slate-50/70"
-            >
-              <span>KKN</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-kkn' ? 'rotate-180 text-emerald-700' : 'text-slate-400'}`} />
-            </button>
+            <div className="flex items-center justify-between bg-slate-50/70 pr-2">
+              <button
+                onClick={() => handleNavClick('kkn')}
+                className={`flex-1 text-left px-3.5 py-2.5 text-sm font-bold transition ${
+                  isKKNActive ? 'text-emerald-800' : 'text-slate-800'
+                }`}
+              >
+                KKN
+              </button>
+              <button
+                onClick={() => setOpenDropdown(openDropdown === 'm-kkn' ? null : 'm-kkn')}
+                className="p-2 text-slate-400 hover:text-emerald-700 cursor-pointer"
+                aria-label="Buka submenu KKN"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === 'm-kkn' ? 'rotate-180 text-emerald-700' : ''}`} />
+              </button>
+            </div>
             {openDropdown === 'm-kkn' && (
               <div className="p-2 space-y-1 bg-white border-t border-slate-100">
                 <button
@@ -742,16 +847,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   Latar Belakang
                 </button>
                 <button
-                  onClick={() => handleNavClick('kkn-visi-misi')}
+                  onClick={() => handleNavClick('kkn-program-kerja')}
                   className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
                 >
-                  Visi dan Misi
-                </button>
-                <button
-                  onClick={() => handleNavClick('kkn-struktural')}
-                  className="w-full text-left px-3 py-2 text-xs rounded-lg text-slate-700 hover:bg-emerald-50 hover:text-emerald-800"
-                >
-                  Struktural
+                  Program Kerja
                 </button>
                 <button
                   onClick={() => handleNavClick('kkn-galeri')}
